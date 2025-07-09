@@ -107,20 +107,19 @@ const submitForm = async () => {
   try {
     // 1. رفع الملف
     await uploadFile(projectName.value, selectedFile.value)
-    // 2. معالجة الملف
+    // 2. معالجة الملف (بدون file_id)
     await processFile(projectName.value, {
-      file_id: selectedFile.value.name,
       chunk_size: 1000,
       overlap_size: 200,
       do_reset: 0
     })
     // 3. فهرسة المشروع
     await indexProject(projectName.value, {})
-    // 4. تم بنجاح
+    // 4. رسالة نجاح
     alert('✅ تم رفع الملف ومعالجته وفهرسته بنجاح!')
     closeModal()
   } catch (error) {
-    console.error('❌ خطأ:', error)
+    console.error('❌ خطأ أثناء تجهيز المشروع:', error)
     alert('حدث خطأ أثناء تجهيز المشروع.')
   } finally {
     isLoading.value = false

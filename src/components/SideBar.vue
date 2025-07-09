@@ -39,6 +39,18 @@
       </nav>
       <!-- تبديل الوضع الداكن -->
          <AddProjectModal />
+<input
+    type="text"
+    placeholder="name..."
+    v-model="inputName"
+    class="mt-4 w-full px-3 py-2 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+  <button
+    class="bg-gradient-to-r from-blue-500 cursor-pointer via-purple-500 to-pink-500 text-white px-4 py-2 mt-5 rounded-md hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition shadow-lg font-semibold"
+    @click="processName"
+  >
+    process
+  </button>
       <div class="absolute bottom-4 left-4">
         <button disabled
           class="flex items-center p-2 rounded-lg cursor-not-allowed  bg-gray-700 transition-colors duration-200"
@@ -87,9 +99,36 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue'
 import AddProjectModal from './AddProjectModal.vue'
+import { indexProject , processFile } from '../api.js'
 const props = defineProps({ isOpen: Boolean })
+const inputName = ref('')
 const emit = defineEmits(['toggle'])
 const activeItem = ref('Home')
+const processName = async () => {
+  if (!inputName.value) {
+    alert('يرجى إدخال اسم المشروع')
+    return
+  }
+  try {
+    // ✅ معالجة المشروع بدون رفع ملف (لازم يكون الملف مرفوع مسبقًا)
+    await processFile(inputName.value, {
+      chunk_size: 1000,
+      overlap_size: 200,
+      do_reset: 1
+    }, {
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+})
+    // ✅ فهرسة المشروع بعد المعالجة
+    // await indexProject(inputName.value, {})
+    alert('✅ تم معالجة وفهرسة المشروع بنجاح!')
+  } catch (e) {
+    alert('❌ حدث خطأ أثناء تجهيز المشروع')
+    console.error(e)
+  }
+}
 const setActiveItem = (name) => {
   activeItem.value = name
 }

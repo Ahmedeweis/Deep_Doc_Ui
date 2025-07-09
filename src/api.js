@@ -1,15 +1,18 @@
 import axios from "axios";
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: "", // فاضي عشان يستخدم proxy
 });
 // رفع ملف
 export function uploadFile(projectName, file) {
   const formData = new FormData();
   formData.append("file", file);
-  return api.post(`/data/upload/${projectName}`, formData);
+  return api.post(`/api/data/upload/${projectName}`, formData);
 }
-// بدء المعالجة
+// معالجة الملف
 export function processFile(projectName, payload) {
-  return api.post(`/data/process/${projectName}`, payload);
+  return api.post(`/api/data/process/${projectName}`, payload);
 }
-export default api;
+// فهرسة المشروع
+export function indexProject(projectName, payload) {
+  return api.post(`/api/data/index/${projectName}`, payload);
+}
