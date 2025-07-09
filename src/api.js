@@ -1,18 +1,19 @@
 import axios from "axios";
+const isDev = import.meta.env.DEV;
 const api = axios.create({
-  baseURL: "", // فاضي عشان يستخدم proxy
+  baseURL: isDev
+    ? "/api" // لو شغال محليًا هيستخدم Vite Proxy
+    : "https://select-recycling-recordings-gross.trycloudflare.com/api/v1", // لو شغال على Vercel
 });
-// رفع ملف
 export function uploadFile(projectName, file) {
   const formData = new FormData();
   formData.append("file", file);
-  return api.post(`/api/data/upload/${projectName}`, formData);
+  return api.post(`/data/upload/${projectName}`, formData);
 }
-// معالجة الملف
 export function processFile(projectName, payload) {
-  return api.post(`/api/data/process/${projectName}`, payload);
+  return api.post(`/data/process/${projectName}`, payload);
 }
-// فهرسة المشروع
 export function indexProject(projectName, payload) {
-  return api.post(`/api/data/index/${projectName}`, payload);
+  return api.post(`/data/index/${projectName}`, payload);
 }
+export default api;
