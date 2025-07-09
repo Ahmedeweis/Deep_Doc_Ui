@@ -1,0 +1,11 @@
+@import "tailwindcss";
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: #111827; /* Tailwind's gray-900 */}
+html {
+  scroll-behavior: smooth;
+}
+html.dark body{
+  background-color: #111827; /* Tailwind's gray-900 */
+}

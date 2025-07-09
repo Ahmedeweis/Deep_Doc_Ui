@@ -1,0 +1,62 @@
+| الصفحة             | التفاصيل                                                  |
+| ------------------ | --------------------------------------------------------- |
+| 🏠 الصفحة الرئيسية | ترحيب بالمستخدم + وصف للمشروع                             |
+| 📤 رفع البيانات    | استمارة لرفع الملفات (POST `/data/upload/{project_name}`) |
+| ⚙️ المعالجة        | إدخال إعدادات chunk/overlap وتفعيل زر المعالجة            |
+| 📚 الأصول Assets   | عرض قائمة بالملفات التي تم رفعها لكل مشروع                |
+| 🧠 فهرسة           | فهرسة المشروع (POST `/nlp/index/push`)                    |
+| 🔍 البحث           | إدخال نص والبحث في المشروع                                |
+| 💬 الإجابة         | إدخال سؤال والحصول على إجابة من داخل الكتب                |
+
+
+3. مثال رفع ملف (Upload) بـ Vue:
+vue
+Copy
+Edit
+<script setup>
+import axios from 'axios'
+const projectName = 'myProject'
+const handleUpload = async (event) => {
+  const formData = new FormData()
+  formData.append('file', event.target.files[0])
+
+  await axios.post(`http://localhost:8000/api/v1/data/upload/${projectName}`, formData)
+}
+</script>
+
+<template>
+  <input type="file" @change="handleUpload" />
+</template>
+4. مثال البحث عن سؤال:
+js
+Copy
+Edit
+axios.post(`http://localhost:8000/api/v1/nlp/index/answer/${projectName}`, {
+  text: "ما هو مفهوم الذكاء الاصطناعي؟",
+  limit: 5,
+  user_id: "u123",
+  use_chat_history: true,
+  use_paraphrasing: true,
+  history_limit: 5
+})
+.then(res => console.log(res.data))
+5. نصيحة تنظيم الكود:
+اعمل مجلد لكل صفحة مثل:
+
+markdown
+Copy
+Edit
+/pages
+  - Home.vue
+  - Upload.vue
+  - Search.vue
+/components
+  - FileCard.vue
+  - ProjectSelector.vue
+6. نقطة API Base:
+لو متكرر http://localhost:8000/api/v1، ممكن تعمله base في axios:
+
+js
+Copy
+Edit
+axios.defaults.baseURL = 'http://localhost:8000/api/v1'
