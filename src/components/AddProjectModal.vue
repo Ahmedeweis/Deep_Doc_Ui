@@ -2,13 +2,13 @@
   <div class="">
     <!-- Modal Trigger Button -->
 <slot name="trigger">
-  <button
-    v-if="isSidebarOpen"
-    @click="openModal"
-    class="bg-blue-500 text-white px-4 py-2 mt-5 rounded-md hover:bg-blue-600 transition"
-  >
-    Add Project
-  </button>
+<button
+  v-if="isSidebarOpen"
+  @click="openModal"
+  class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white px-4 py-2 mt-5 rounded-md hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 cursor-pointer transition shadow-lg font-semibold"
+>
+  Add Project
+</button>
   <button
     v-else
     @click="openModal"
