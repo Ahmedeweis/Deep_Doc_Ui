@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="z-[999]">
     <!-- السايدبار -->
 <div
   class="transition-all duration-300 shadow-lg border-r-2 border-[#2B7FFF] bg-gray-900 dark:bg-none text-white fixed inset-y-0 left-0 z-40 px-4 py-2"

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="">
     <!-- Modal Trigger Button -->
 <slot name="trigger">
   <button
@@ -20,13 +20,13 @@
     <!-- Modal Overlay -->
     <div
       v-if="isModalOpen"
-      class="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50"
+class="fixed inset-0 flex items-center justify-center z-[999] bg-black/40 backdrop-blur-sm"
     >
       <!-- Modal Content -->
       <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
         <!-- Close Button -->
         <div class="flex justify-end">
-          <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
+          <button @click="closeModal" class="text-gray-500 cursor-pointer hover:text-gray-700">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
@@ -75,7 +75,7 @@
         <div class="mt-6 flex justify-end">
           <button
             @click="submitForm"
-            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer transition"
           >
             Send
           </button>
