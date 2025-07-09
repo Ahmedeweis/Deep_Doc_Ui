@@ -12,30 +12,4 @@ export function uploadFile(projectName, file) {
 export function processFile(projectName, payload) {
   return api.post(`/data/process/${projectName}`, payload);
 }
-// فهرسة المشروع
-export function indexProject(projectName, payload) {
-  return api.post(`/nlp/index/push/${projectName}`, payload);
-}
-// البحث داخل المشروع
-export function searchInProject(projectName, payload) {
-  return api.post(`/nlp/index/search/${projectName}`, payload);
-}
-// سؤال مباشر من داخل المشروع
-export function askFromProject(projectName, payload) {
-  return api.post(`/nlp/index/answer/${projectName}`, payload);
-}
-// عرض الأصول الخاصة بالمشروع
-export function getAssets(projectName) {
-  return api.get(`/data/assets/${projectName}`);
-}
-// تحميل أصل معين
-export function downloadAsset(projectName, assetName) {
-  return api.get(`/data/assets/${projectName}/${assetName}`, {
-    responseType: "blob", // لو ملف للتحميل
-  });
-}
-// معلومات الفهرسة
-export function getIndexInfo(projectName) {
-  return api.get(`/nlp/index/info/${projectName}`);
-}
 export default api;
