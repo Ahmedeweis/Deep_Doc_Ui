@@ -216,17 +216,17 @@ const sendQuestion = async () => {
             console.log('✅ Stream completed')
           }
         } catch (err) {
-          console.warn('🟠 غير قادر على قراءة الرد:', msg.data)
+ console.warn(' Unable to parse response:', msg.data)
         }
       },
       onerror(err) {
-        console.error('❌ SSE Error:', err)
-        answerStream.value = '❌ فشل في جلب البيانات'
+        console.error(' SSE Error:', err)
+        answerStream.value = '❌ Failed to fetch data'
       },
     })
   } catch (err) {
-    console.error('❌ Error أثناء الإرسال:', err)
-    answerStream.value = '❌ فشل في الاتصال بالخادم'
+    console.error(' Error during request:', err)
+    answerStream.value = ' Failed to connect to the server'
   }
 }
 // Textarea state and logic
