@@ -51,8 +51,20 @@
   >
     process
   </button>
+  <input
+    type="text"
+    placeholder="name..."
+    v-model="indexxName"
+    class="mt-4 w-full px-3 py-2 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+  <button
+  class="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 text-white px-4 py-2 mt-2 rounded-md hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 transition shadow-lg font-semibold"
+  @click="indexName"
+>
+  Index Project
+</button>
       <div class="absolute bottom-4 left-4">
-        <button disabled
+        <button
           class="flex items-center p-2 rounded-lg cursor-not-allowed  bg-gray-700 transition-colors duration-200"
           @click="toggleTheme"
         >
@@ -99,33 +111,46 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue'
 import AddProjectModal from './AddProjectModal.vue'
-import { indexProject , processFile } from '../api.js'
+import { indexProject, processFile } from '../api.js'
 const props = defineProps({ isOpen: Boolean })
 const inputName = ref('')
+const indexxName = ref('')
 const emit = defineEmits(['toggle'])
 const activeItem = ref('Home')
+// دالة مستقلة لمعالجة المشروع
 const processName = async () => {
   if (!inputName.value) {
     alert('يرجى إدخال اسم المشروع')
     return
   }
   try {
-    // ✅ معالجة المشروع بدون رفع ملف (لازم يكون الملف مرفوع مسبقًا)
     await processFile(inputName.value, {
       chunk_size: 1000,
       overlap_size: 200,
       do_reset: 1
     }, {
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  }
-})
-    // ✅ فهرسة المشروع بعد المعالجة
-    // await indexProject(inputName.value, {})
-    alert('✅ تم معالجة وفهرسة المشروع بنجاح!')
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
+    alert('✅ تم معالجة المشروع بنجاح!')
   } catch (e) {
     alert('❌ حدث خطأ أثناء تجهيز المشروع')
+    console.error(e)
+  }
+}
+// دالة مستقلة لفهرسة المشروع
+const indexName = async () => {
+  if (!indexxName.value) {
+    alert('يرجى إدخال اسم المشروع للفهرسة')
+    return
+  }
+  try {
+    await indexProject(indexxName.value, {})
+    alert('✅ تم فهرسة المشروع بنجاح!')
+  } catch (e) {
+    alert('❌ حدث خطأ أثناء الفهرسة')
     console.error(e)
   }
 }

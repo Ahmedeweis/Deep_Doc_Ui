@@ -7,7 +7,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         target:
-          "https://select-recycling-recordings-gross.trycloudflare.com/api/v1",
+          "https://experienced-estimate-amd-display.trycloudflare.com/api/v1",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

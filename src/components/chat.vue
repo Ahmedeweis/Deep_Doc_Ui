@@ -3,11 +3,24 @@
     class="w-full max-w-xl px-4 py-3 bg-white dark:bg-gray-800 shadow-lg rounded-2xl absolute bottom-6 left-1/2 transform -translate-x-1/2"
     style="max-height: 400px;"
   >
+  <div
+  v-if="answerStream"
+  ref="answerRef"
+  class="mt-4 p-3 rounded whitespace-pre-wrap overflow-y-auto max-h-[200px]"
+>
+  <strong>Answer:</strong>
+  <p>{{ answerStream }}</p>
+</div>
+      <input
+      type="text"
+      v-model="projectName"
+      placeholder=" pro name"
+    />
     <label for="search-input" class="sr-only">Search</label>
     <!-- Input Field -->
 <textarea
       ref="messageRef"
-      v-model="searchQuery"
+      v-model="questionText"
       rows="2"
       placeholder="Ask anything ... "
       @input="autoResize"
@@ -142,7 +155,9 @@
           </div>
         </div>
         <!-- Send Button -->
-        <button type="button"  class=" cursor-pointer top-14 -right-4 w-8 h-8 bg-blue-500 rounded-md text-white flex items-center justify-center shadow-md hover:bg-blue-600">
+        <button type="button"
+         @click="sendQuestion"
+           class=" cursor-pointer top-14 -right-4 w-8 h-8 bg-blue-500 rounded-md text-white flex items-center justify-center shadow-md hover:bg-blue-600">
                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path d="M5 12h14M13 5l7 7-7 7" />
         </svg>
@@ -154,8 +169,67 @@
 </template>
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { BASE_STREAM_URL } from '../api.js';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+// import { EventSourcePolyfill } from 'event-source-polyfill';
+const projectName = ref('')
+const questionText = ref('')
+const answerStream = ref('')
+const sendQuestion = async () => {
+  if (!projectName.value || !questionText.value) {
+    alert('يرجى إدخال اسم المشروع والسؤال')
+    return
+  }
+  // مبدأيًا يكون فاضي (مش جاري التحميل)
+  answerStream.value = ''
+  const url = `${BASE_STREAM_URL}/nlp/index/answer/stream/${projectName.value}`
+  try {
+    await fetchEventSource(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'text/event-stream',
+      },
+      body: JSON.stringify({
+        text: questionText.value,
+        limit: 5,
+        user_id: 'user-123',
+        use_chat_history: true,
+        use_paraphrasing: true,
+        history_limit: 5,
+      }),
+      onopen(res) {
+        if (res.ok) {
+          console.log('✅ SSE Started')
+        } else {
+          throw new Error(`HTTP Error: ${res.status}`)
+        }
+      },
+      onmessage(msg) {
+        if (!msg.data) return
+        try {
+          const parsed = JSON.parse(msg.data)
+          if (parsed.event === 'chunk' && parsed.data?.chunk) {
+            answerStream.value += parsed.data.chunk
+          }
+          if (parsed.event === 'complete') {
+            console.log('✅ Stream completed')
+          }
+        } catch (err) {
+          console.warn('🟠 غير قادر على قراءة الرد:', msg.data)
+        }
+      },
+      onerror(err) {
+        console.error('❌ SSE Error:', err)
+        answerStream.value = '❌ فشل في جلب البيانات'
+      },
+    })
+  } catch (err) {
+    console.error('❌ Error أثناء الإرسال:', err)
+    answerStream.value = '❌ فشل في الاتصال بالخادم'
+  }
+}
 // Textarea state and logic
-const searchQuery = ref('');
 const messageRef = ref(null);
 const autoResize = () => {
   const el = messageRef.value;
