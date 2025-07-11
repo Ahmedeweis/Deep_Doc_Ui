@@ -6,8 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target:
-          "https://experienced-estimate-amd-display.trycloudflare.com/api/v1",
+        target: "https://assign-genius-sought-alerts.trycloudflare.com/api/v1",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

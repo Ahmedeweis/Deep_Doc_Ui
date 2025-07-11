@@ -20,22 +20,28 @@
         <h1 v-if="isOpen" class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#1AB8FD] via-[#A52EFB] to-[#1AB8FD]">Dash Board</h1>
       </div>
       <!-- روابط التنقل -->
-      <nav class="pt-4">
-        <ul class="space-y-2">
-          <li v-for="item in navItems" :key="item.name">
-<a
-  href="#"
-  class="flex items-center mr-2 gap-3 p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200"
-  :style="activeItem === item.name ? 'background: linear-gradient(149deg, #6C1E41 6.96%, #251743 40.17%, #120c1f 73.39%)' : ''"
-  @click.prevent="setActiveItem(item.name); closeSidebar()"
->
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path :d="item.iconPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-              </svg>
-              <span v-if="isOpen" class="whitespace-nowrap">{{ item.name }}</span>
-            </a>
-          </li>
-        </ul>
+      <nav class="pt-4" v-if="false">
+       <ul class="space-y-2">
+  <li v-for="item in navItems" :key="item.name">
+    <a
+      href="#"
+      class="flex items-center gap-3 p-3 rounded-xl transition-all duration-300 group"
+      :class="activeItem === item.name
+        ? 'bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 shadow-lg'
+        : 'bg-gray-800 hover:bg-gray-700'"
+      @click.prevent="setActiveItem(item.name); closeSidebar()"
+    >
+      <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-900 group-hover:bg-opacity-50 transition-all">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path :d="item.iconPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+        </svg>
+      </div>
+      <span v-if="isOpen" class="whitespace-nowrap text-white font-semibold tracking-wide">
+        {{ item.name }}
+      </span>
+    </a>
+  </li>
+</ul>
       </nav>
       <!-- تبديل الوضع الداكن -->
          <AddProjectModal />
@@ -63,7 +69,30 @@
 >
   Index Project
 </button>
-      <div class="absolute bottom-4 left-4">
+    <input
+  type="text"
+  v-model="assetsProjectName"
+  placeholder="Project name"
+  class="mt-4 w-full px-3 py-2 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+<button
+  class="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white px-4 py-2 mt-2 rounded-md hover:from-purple-600 hover:via-pink-600 hover:to-red-600 transition shadow-lg font-semibold"
+  @click="fetchAssets"
+>
+  Get Project Assets
+</button>
+<ul v-if="assetsList.length" class="mt-4 text-sm text-white space-y-1 max-h-40 overflow-auto">
+  <li v-for="asset in assetsList" :key="asset.asset_id">
+    {{ asset.asset_name }}
+    <button
+      class="ml-2 bg-blue-500 px-2 py-1 rounded text-xs"
+      @click="downloadAsset(asset.asset_name)"
+    >
+      Download
+    </button>
+  </li>
+</ul>
+      <div class="absolute bottom-4 left-4" v-if="false">
         <button
           class="flex items-center p-2 rounded-lg cursor-not-allowed  bg-gray-700 transition-colors duration-200"
           @click="toggleTheme"
@@ -111,13 +140,45 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue'
 import AddProjectModal from './AddProjectModal.vue'
-import { indexProject, processFile } from '../api.js'
+import { indexProject, processFile , getAssets, downloadAssetFile } from '../api.js'
 const props = defineProps({ isOpen: Boolean })
 const inputName = ref('')
 const indexxName = ref('')
 const emit = defineEmits(['toggle'])
 const activeItem = ref('Home')
-// دالة مستقلة لمعالجة المشروع
+const assetsProjectName = ref('')
+const assetsList = ref([])
+const fetchAssets = async () => {
+  if (!assetsProjectName.value) {
+    alert('Please enter a project name')
+    return
+  }
+  try {
+    const res = await getAssets(assetsProjectName.value)
+    assetsList.value = res.data.assets
+    console.log(res.data)
+  } catch (e) {
+    alert('Failed to get assets')
+    console.error(e)
+  }
+}
+const downloadAsset = async (assetName) => {
+  if (!assetsProjectName.value || !assetName) return
+  try {
+    const res = await downloadAssetFile(assetsProjectName.value, assetName, {
+      responseType: 'blob',
+    })
+    const url = window.URL.createObjectURL(new Blob([res.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', assetName)
+    document.body.appendChild(link)
+    link.click()
+  } catch (err) {
+    console.error(err)
+    alert('Failed to download')
+  }
+}
 const processName = async () => {
   if (!inputName.value) {
     alert('يرجى إدخال اسم المشروع')

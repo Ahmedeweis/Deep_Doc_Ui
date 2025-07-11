@@ -19,6 +19,12 @@ export function processFile(projectName, payload) {
 export function indexProject(projectName, payload) {
   return api.post(`/nlp/index/push/stream/${projectName}`, payload);
 }
+export function getAssets(projectName) {
+  return api.get(`/data/assets/${projectName}`);
+}
+export function downloadAssetFile(projectName, assetName, config = {}) {
+  return api.get(`/data/assets/${projectName}/${assetName}`, config);
+}
 // مهم: تصدير الـ base url كمان عشان تستخدمه في SSE
 export const BASE_STREAM_URL = isDev
   ? "/api"
