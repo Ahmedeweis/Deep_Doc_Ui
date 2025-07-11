@@ -92,6 +92,12 @@
     </button>
   </li>
 </ul>
+<router-link
+  to="/pdf"
+  class="block bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white px-4 py-2 mt-4 rounded-md hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition shadow-lg font-semibold text-center"
+>
+  Open PDF Viewer
+</router-link>
       <div class="absolute bottom-4 left-4" v-if="false">
         <button
           class="flex items-center p-2 rounded-lg cursor-not-allowed  bg-gray-700 transition-colors duration-200"
