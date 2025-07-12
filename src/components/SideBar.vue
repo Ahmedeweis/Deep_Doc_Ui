@@ -72,9 +72,9 @@
   </li>
 </ul>
           </li>
-                               <router-link to="/pdf" class=" bg-blue-500 text-white p-3 my-[100px]" >
+                               <!-- <router-link to="/pdf" class=" bg-blue-500 text-white p-3 my-[100px]" >
 PDF
-      </router-link>
+      </router-link> -->
         </ul>
       </nav>
       <AddProjectModal />
@@ -106,9 +106,10 @@ PDF
   </div>
 </template>
 <script setup>
-import { defineProps, defineEmits, ref , reactive } from 'vue'
+import { defineProps, defineEmits, ref , reactive, onMounted } from 'vue'
 import AddProjectModal from './AddProjectModal.vue'
-import { indexProject, processFile, getAssets, downloadAssetFile } from '../api.js'
+import { indexProject, processFile, getAssets, downloadAssetFile ,  getAllProjects  } from '../api.js'
+const dummyProjects = ref([])
 const projectAssets = reactive({})
 const props = defineProps({ isOpen: Boolean })
 // const inputName = ref('')
@@ -212,12 +213,7 @@ if (
   document.documentElement.classList.add('dark')
   isDarkMode.value = true
 }
-const dummyProjects = ref([
-  { name: 'CVTest'},
-  { name: 'Javascript'}, // error
-  {name : 'thecleancoder'}
-])
-const navItems = [
+const navItems = ref([
   {
     name: 'Home',
     iconPath:
@@ -228,7 +224,7 @@ const navItems = [
     name: 'Projects',
     iconPath:
       'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
-       subItems: dummyProjects.value.map(project => project.name),
+        subItems: [] // مبدئيًا فاضي
   },
   {
     name: 'History',
@@ -236,7 +232,18 @@ const navItems = [
       'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
     subItems: [],
   },
-]
+])
+const fetchProjects = async () => {
+  try {
+    const response = await getAllProjects();
+    dummyProjects.value = response.data.projects.map(project => ({
+      name: project.project_name
+    }));
+    navItems.value[1].subItems = dummyProjects.value.map(project => project.name);
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+  }
+};
 const openSubMenu = ref(null)
 const toggleSubMenu = (name) => {
   openSubMenu.value = openSubMenu.value === name ? null : name
@@ -260,6 +267,7 @@ const handleProjectClick = async (projectName) => {
     await fetchProjectAssets(projectName)
   }
 }
+onMounted(fetchProjects)
 </script>
 <style scoped>
 /* يمكن تركه فاضي حاليًا أو استخدامه لاحقًا */

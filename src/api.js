@@ -25,6 +25,9 @@ export function getAssets(projectName) {
 export function downloadAssetFile(projectName, assetName, config = {}) {
   return api.get(`/data/assets/${projectName}/${assetName}`, config);
 }
+export function getAllProjects() {
+  return api.get(`/data/projects`);
+}
 // مهم: تصدير الـ base url كمان عشان تستخدمه في SSE
 export const BASE_STREAM_URL = isDev
   ? "/api"

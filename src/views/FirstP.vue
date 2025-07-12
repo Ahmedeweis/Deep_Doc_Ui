@@ -1,7 +1,7 @@
 <template>
  <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <SideBar :isOpen="isSidebarOpen" @toggle="toggleSidebar" @select-project="selectedProject = $event" />
+<SideBar :isOpen="isSidebarOpen" @toggle="toggleSidebar" @project-selected="selectedProject = $event" />
     <!-- Main Content -->
     <div
       :class="[
@@ -13,12 +13,12 @@
       <!-- محتوى الصفحة: صف أفقي -->
       <div class="flex flex-row h-full gap-4">
         <!-- PDFViewe على اليمين ويأخذ 2/3 -->
-<div class="flex-[2] min-w-0 order-2 max-h-screen overflow-auto">
+<div class="flex-[2] min-w-0 order-2 max-h-screen overflow-auto" v-if="false" >
           <PDFViewe />
         </div>
         <!-- الشات على اليسار ويأخذ 1/3 -->
         <div class="flex-[1]  min-w-0 order-1  self-end mb-[50px]">
-          <chat class="h-full" />
+          <chat class="h-full" :selected-project="selectedProject" />
         </div>
       </div>
     </div>
@@ -32,6 +32,7 @@ import chat from '../components/chat.vue'
 import { ref, provide } from 'vue'
 const isSidebarOpen = ref(true)
 provide('isSidebarOpen', isSidebarOpen)
+const selectedProject = ref(null) // ضروري
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
 }
