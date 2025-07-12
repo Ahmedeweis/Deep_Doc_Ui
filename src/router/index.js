@@ -10,6 +10,11 @@ const routes = [
     name: "firstp",
     component: () => import("../views/FirstP.vue"),
   },
+  {
+    path: "/pdf",
+    name: "PdfViewer",
+    component: () => import("../views/PdfV.vue"),
+  },
   //   {
   //     path: "/upload",
   //     name: "Upload",

@@ -72,16 +72,12 @@
   </li>
 </ul>
           </li>
+                               <router-link to="/pdf" class=" bg-blue-500 text-white p-3 my-[100px]" >
+PDF
+      </router-link>
         </ul>
       </nav>
       <AddProjectModal />
-      <input type="text" v-model="assetsProjectName" placeholder="Project name"
-        class="mt-4 w-full px-3 py-2 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      <button
-        class="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white px-4 py-2 mt-2 rounded-md hover:from-purple-600 hover:via-pink-600 hover:to-red-600 transition shadow-lg font-semibold"
-        @click="fetchAssets">
-        Get Project Assets
-      </button>
       <ul v-if="assetsList.length" class="mt-4 text-sm text-white space-y-1 max-h-40 overflow-auto">
         <li v-for="asset in assetsList" :key="asset.asset_id">
           {{ asset.asset_name }}
@@ -90,10 +86,6 @@
           </button>
         </li>
       </ul>
-      <p
-        class="block bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white px-4 py-2 mt-4 rounded-md hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition shadow-lg font-semibold text-center">
-        Open PDF Viewer
-    </p>
       <div class="absolute bottom-4 left-4">
         <button class="flex items-center p-2 rounded-lg cursor-not-allowed  bg-gray-700 transition-colors duration-200"
           @click="toggleTheme">
@@ -130,20 +122,6 @@ const selectProject = (projectName) => {
 const activeItem = ref('Home')
 const assetsProjectName = ref('')
 const assetsList = ref([])
-const fetchAssets = async () => {
-  if (!assetsProjectName.value) {
-    alert('Please enter a project name')
-    return
-  }
-  try {
-    const res = await getAssets(assetsProjectName.value)
-    assetsList.value = res.data.assets
-    console.log(res.data)
-  } catch (e) {
-    alert('Failed to get assets')
-    console.error(e)
-  }
-}
 const downloadAsset = async (assetName) => {
   if (!assetsProjectName.value || !assetName) return
   try {
