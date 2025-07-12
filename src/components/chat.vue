@@ -7,7 +7,6 @@
       <strong>Answer:</strong>
       <p>{{ answerStream }}</p>
     </div>
-    <input type="text" v-model="projectName" placeholder=" pro name" />
     <label for="search-input" class="sr-only">Search</label>
     <!-- Input Field -->
     <textarea ref="messageRef" v-model="questionText" rows="2" placeholder="Ask anything ... " @input="autoResize"
@@ -96,21 +95,23 @@
   </form>
 </template>
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { ref, onMounted, onBeforeUnmount, nextTick,defineProps  } from 'vue';
 import { BASE_STREAM_URL } from '../api.js';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 // import { EventSourcePolyfill } from 'event-source-polyfill';
+const props = defineProps({
+  selectedProject: String
+});
 const projectName = ref('')
 const questionText = ref('')
 const answerStream = ref('')
 const sendQuestion = async () => {
-  if (!projectName.value || !questionText.value) {
-    alert('يرجى إدخال اسم المشروع والسؤال')
+  if (!props.selectedProject || !questionText.value) {
     return
   }
   // مبدأيًا يكون فاضي (مش جاري التحميل)
   answerStream.value = ''
-  const url = `${BASE_STREAM_URL}/nlp/index/answer/stream/${projectName.value}`
+  const url = `${BASE_STREAM_URL}/nlp/index/answer/stream/${props.selectedProject}`
   try {
     await fetchEventSource(url, {
       method: 'POST',

@@ -1,7 +1,7 @@
 <template>
  <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <SideBar :isOpen="isSidebarOpen" @toggle="toggleSidebar" />
+<SideBar :isOpen="isSidebarOpen" @toggle="toggleSidebar" @project-selected="handleProjectSelect" />
     <!-- Main Content -->
     <div
       :class="[
@@ -18,7 +18,7 @@
         </div>
         <!-- الشات على اليسار ويأخذ 1/3 -->
         <div class="flex-[1]  min-w-0 order-1  self-end mb-[50px]">
-          <chat class="h-full" />
+<chat :selectedProject="selectedProject" />
         </div>
       </div>
     </div>
@@ -31,6 +31,11 @@ import SideBar from '../components/SideBar.vue'
 import chat from '../components/chat.vue'
 import { ref, provide } from 'vue'
 const isSidebarOpen = ref(true)
+const selectedProject = ref('')
+const handleProjectSelect = (projectName) => {
+  selectedProject.value = projectName;
+  console.log("Selected Project:", projectName);
+};
 provide('isSidebarOpen', isSidebarOpen)
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value

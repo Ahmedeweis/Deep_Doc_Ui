@@ -2,8 +2,8 @@
   <header class="w-full flex items-center justify-between px-6 py-4 bg-gray-900 text-white shadow">
         <nav class="hidden md:flex gap-6 font-medium">
       <RouterLink to="/" class="text-blue-400">Home</RouterLink>
-      <RouterLink to="/about" class="text-blue-400">About Us</RouterLink>
-      <RouterLink to="/contact" class="text-blue-400">Contact</RouterLink>
+      <!-- <RouterLink to="/about" class="text-blue-400">About Us</RouterLink>
+      <RouterLink to="/contact" class="text-blue-400">Contact</RouterLink> -->
     </nav>
     <div class="flex items-center gap-2">
       <img src="/Logo.png" alt="Logo" class="w-8 h-8" />
