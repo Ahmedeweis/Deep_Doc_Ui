@@ -1,7 +1,8 @@
 <template>
+    <!-- class="w-full max-w-xl   shadow-lg rounded-2xl absolute bottom-6 left-1/2 transform -translate-x-1/2"
+    style="max-height: 400px;" -->
   <form
-    class="w-full max-w-xl px-4 py-3 bg-white dark:bg-gray-800 shadow-lg rounded-2xl absolute bottom-6 left-1/2 transform -translate-x-1/2"
-    style="max-height: 400px;">
+ class="bg-white dark:bg-gray-800 rounded-2xl mx-[20px] px-4 py-3" >
     <div v-if="answerStream" ref="answerRef" class="mt-4 p-3 rounded whitespace-pre-wrap overflow-y-auto max-h-[200px]">
       <strong>Answer:</strong>
       <p>{{ answerStream }}</p>

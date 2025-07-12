@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen ">
+ <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
     <SideBar :isOpen="isSidebarOpen" @toggle="toggleSidebar" />
     <!-- Main Content -->
@@ -10,21 +10,17 @@
       ]"
     >
       <Header />
-      <!-- محتوى الصفحة -->
-      <div class="flex-1 overflow-auto relative dark:bg-gray-900 px-4">
-        <router-view class="pb-32" />
+      <!-- محتوى الصفحة: صف أفقي -->
+      <div class="flex flex-row h-full gap-4">
+        <!-- PDFViewe على اليمين ويأخذ 2/3 -->
+<div class="flex-[2] min-w-0 order-2 max-h-screen overflow-auto">
+          <PDFViewe />
+        </div>
+        <!-- الشات على اليسار ويأخذ 1/3 -->
+        <div class="flex-[1]  min-w-0 order-1  self-end mb-[50px]">
+          <chat class="h-full" />
+        </div>
       </div>
-      <!-- الشات مثبت في الأسفل -->
-      <chat
-        :class="[
-          'fixed bottom-6 z-50 transition-all duration-300',
-          isSidebarOpen
-            ? 'left-[calc(50%+11rem)] w-[1500px] md:left-[calc(50%+8rem)] md:w-[1500px]'
-            : 'left-1/2 w-[1500px]',
-          'transform -translate-x-1/2'
-        ]"
-      />
-        <PDFViewe />
     </div>
   </div>
 </template>
@@ -35,7 +31,6 @@ import SideBar from '../components/SideBar.vue'
 import chat from '../components/chat.vue'
 import { ref, provide } from 'vue'
 const isSidebarOpen = ref(true)
-//
 provide('isSidebarOpen', isSidebarOpen)
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
