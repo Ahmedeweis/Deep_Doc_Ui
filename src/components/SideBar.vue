@@ -35,7 +35,7 @@
               </span>
             </a>
             <!-- القائمة الفرعية -->
-<ul v-if="openSubMenu === item.name && item.subItems.length" class="pl-6 space-y-1 mt-1.5">
+<ul v-if="openSubMenu === item.name && item.subItems.length"  style="overflow: hidden;" class="pl-6 space-y-1 mt-1.5flow-hidden">
   <li
     v-for="(sub, index) in item.subItems"
     :key="sub"
